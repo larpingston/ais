@@ -52,7 +52,7 @@ map() {
     "Root" "" "User" "" "Timezone" "" \
     "Bootloader" "" "Locale" ""\
     "AUR" "" "Kernel" "" "Shell" "" \
-    "Network" "" "DNS" "" "Graphics" "" "Desktop" "" \
+    "Network" "" "DNS" "" "Graphics" "" \
     "Modules" ""
     )
     then
@@ -77,7 +77,6 @@ map() {
             Network) option_network ;;
 						DNS) option_dns ;;
 						Graphics) option_graphics ;;
-            Desktop) option_desktop ;;
             Modules) option_modules ;;
         esac
 
