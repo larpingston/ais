@@ -1,0 +1,16 @@
+#!/bin/bash
+title=cpu-ucode
+description="- Installs CPU microcode for Intel or AMD"
+status=on
+
+main() {
+
+    if lscpu | grep "GenuineIntel"  
+    then
+        UCODE="intel-ucode"
+    else 
+        UCODE="amd-ucode"
+    fi
+
+    install $UCODE
+}

@@ -1,0 +1,39 @@
+#!/bin/bash
+title=battery-threshold
+description="- locks batttery chraging to 80% and starts at 40% (good for battery lifetime) dinit only for now"
+status=off
+
+main() {
+
+	SCRIPT_DIR="/usr/local/bin"
+	SCRIPT_BATTERY="$SCRIPT_DIR/battery-threshold"
+
+	mkdir -p $SCRIPT_DIR
+
+	chown "$USERNAME" "$SCRIPT_DIR"
+	touch "$SCRIPT_BATTERY"
+
+	sudo -u "$USERNAME" sudo chmod +x "$SCRIPT_BATTERY"
+
+if [ "$INIT" == "dinit" ]
+then
+	echo "#!/bin/sh
+echo 40 > /sys/class/power_supply/BAT0/charge_start_threshold 
+echo 40 > /sys/class/power_supply/BAT1/charge_start_threshold 
+
+echo 80 > /sys/class/power_supply/BAT0/charge_stop_threshold 
+echo 80 > /sys/class/power_supply/BAT1/charge_stop_threshold" > "$SCRIPT_BATTERY"
+
+	touch /etc/dinit.d/battery-threshold
+
+echo "#!/bin/sh
+type = scripted
+command = /usr/local/bin/battery-threshold
+restart = false
+after = local.target
+before = login.target" > /etc/dinit.d/battery-threshold
+
+service battery-threshold
+
+fi
+}

@@ -1,0 +1,26 @@
+#!/bin/bash
+title=broadcom-driver
+description="- Driver for broadcom wifi card"
+status=off
+
+main() {
+
+        if [ "$KERNEL" == "linux" ]
+        then
+                install broadcom-wl
+        else
+                install broadcom-wl-dkms
+        fi
+
+	{
+  	echo "blacklist b43"
+  	echo "blacklist bcma"
+  	echo "blacklist ssb"
+  	echo "blacklist brcmsmac"
+  	echo "blacklist ndiswrapper"
+	} | tee -a /etc/modprobe.d/blacklist-broadcom.conf
+
+        rfkill unblock wifi
+        modprobe wl
+
+}

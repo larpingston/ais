@@ -1,0 +1,11 @@
+#!/bin/bash
+title=tlp
+description="- Advanced power management"
+status=off
+
+main() {
+    install tlp tlp-$INIT
+
+    service tlp
+
+}

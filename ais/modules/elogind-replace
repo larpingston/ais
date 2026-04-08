@@ -1,0 +1,23 @@
+#!/bin/bash
+title=elogind-replace
+description="- Replace elogind with seatd acpid pam (only wayland)"
+status=off
+
+main() {
+
+    remove elogind elogind-$INIT
+
+    install seatd seatd-$INIT acpid acpid-$INIT turnstile pam_rundir
+
+    if [ "$INIT" == "dinit" ] || [ "$INIT" == "openrc" ]
+    then
+        install turnstile-$INIT
+    fi
+
+    usermod -a -G seat $USERNAME
+
+    service seatd
+    service acpid
+    service turnstiled
+
+}
