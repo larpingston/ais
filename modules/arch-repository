@@ -1,0 +1,34 @@
+#!/bin/bash
+title=arch-repository
+description="- Adds main arch repository"
+status=on
+
+main() {
+
+    install artix-archlinux-support
+
+    echo "
+#[testing]
+#Include = /etc/pacman.d/mirrorlist-arch
+
+
+[extra]
+Include = /etc/pacman.d/mirrorlist-arch
+
+
+#[multilib-testing]
+#Include = /etc/pacman.d/mirrorlist-arch
+
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist-arch
+" >> /etc/pacman.conf
+
+    pacman-key --populate archlinux
+
+	if [ "$NETWORK" == "iwd" ]
+	then
+		install impala
+	fi	
+
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+title=print
+description="- Basic printer drivers"
+status=off
+
+main() {
+        install cups-$INIT
+        service cupsd
+
+}

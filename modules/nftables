@@ -1,0 +1,34 @@
+#!/bin/bash
+title=nftables
+description="- Includes a default firewall config"
+status=on
+
+main() {
+    install nftables nftables-$INIT
+
+    echo -e '#!/usr/sbin/nft -f \n' >> /etc/nftables.conf
+    echo -e 'flush ruleset \n' >> /etc/nftables.conf 
+
+    # Create table
+    nft add table inet filter
+
+    # Input chain
+    nft add chain inet filter input '{type filter hook input priority 0; policy drop;}' &&
+    nft add rule inet filter input ct state invalid drop &&
+    nft add rule inet filter input ct state { established, related } accept &&
+    nft add rule inet filter input iif "lo" accept &&
+    nft add rule inet filter input iif != "lo" ip daddr 127.0.0.1/8 drop &&
+    nft add rule inet filter input iif != "lo" ip6 daddr ::1 drop
+
+    # Output chain
+    nft add chain inet filter output '{type filter hook output priority 0; policy accept;}'
+
+    # Forward chain 
+    nft add chain inet filter forward '{type filter hook forward priority 0; policy drop;}'
+
+    # Save config
+        nft list ruleset >> /etc/nftables.conf
+
+        service nftables
+
+}

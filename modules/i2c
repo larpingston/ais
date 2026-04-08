@@ -1,0 +1,14 @@
+#!/bin/bash
+title=i2c
+description="- backlight for display monitors"
+status=off
+
+main() {
+        install i2c-tools ddcutil
+
+        touch /etc/modules-load.d/i2c-dev.conf
+
+        echo "i2c_dev" > /etc/modules-load.d/i2c-dev.conf
+
+        usermod -aG i2c $USERNAME
+}
