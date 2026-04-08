@@ -11,6 +11,7 @@ option_modules() {
 
     for i in "${MODULES_LIST[@]}"
     do
+        [ "$i" = "pipewire" ] && continue
         if [ -e "modules/$i" ] && check_module ; then
             MODULES_ARRAY+=("'$title' '$description' '$status'")
         fi
@@ -19,7 +20,7 @@ option_modules() {
     # Using dash here as a simple solution to it misbehaving when ran with bash
     modules=( $(dash -c "dialog --begin 5 5 \
       --title 'HELPER' \
-      --infobox 'elogind-replace is very experimental, I do not recommend it\nI2c is nice for monitors to change backlight, only option that works for me\nI recommend alo TLP if you are on laptop\nfor pipewire see README' 0 0 \
+      --infobox 'elogind-replace is very experimental, I do not recommend it\nI2c is nice for monitors to change backlight, only option that works for me\nI recommend also TLP if you are on laptop' 0 0 \
       --and-widget \
       --stdout \
     --title 'Extra Options'\

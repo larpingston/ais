@@ -10,7 +10,7 @@ option_bootloader() {
     --no-cancel \
     --extra-button --extra-label "MAP" \
     --checklist  "Select bootloader:" 0 0 0 \
-    "refind" "" "on" "efistub" "" "off" "efistub_fallback" "" "off" "limine" "" "off"
+    "grub" "" "on" "limine" "" "off" "refind" "" "off" "efistub" "" "off" "efistub_fallback" "" "off"
     )
         [ "$?" == "3" ] && map
 

@@ -36,6 +36,18 @@ cat > /boot/refind_linux.conf << EOF
 EOF
 }
 
+execute_grub() {
+    install grub os-prober
+
+    if [ -d /sys/firmware/efi ]; then
+        grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Artix
+    else
+        grub-install --target=i386-pc "$DISK"
+    fi
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+}
+
 execute_efistub() {
 
         efibootmgr --create \
