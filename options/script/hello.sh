@@ -11,6 +11,7 @@ welcome() {
 Also you can press first letter of options for example: d for dinit.\n\nUse MAP button to navigate through functions, in case you would like to go back.\
 \n\nOptions will not be executed untill the end of options when you will press confirm!\nI tried to put first option recommended\n\n READ EVERYTHING CAREFOULY!" 0 0
 
-        option_theme
+        apply_default_theme
+        option_disk
 }
 

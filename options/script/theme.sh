@@ -1,5 +1,10 @@
 #!/bin/bash
 
+apply_default_theme() {
+    # Default to a dark red-ish palette without prompting.
+    wal -q --theme "sexy-tangoesque" 2>/dev/null || wal -q --theme "sexy-s3r0-modified" 2>/dev/null || true
+}
+
 option_theme() {
 
     if THEME=$(monolog --begin 5 5 \
@@ -14,7 +19,7 @@ option_theme() {
     "sexy-s3r0-modified" "" "solarized" "LOL"
     )
     then
-        wal -q --theme $THEME
+        wal -q --theme "$THEME"
     else
         [ "$?" == "3" ] && option_disk 
     fi
