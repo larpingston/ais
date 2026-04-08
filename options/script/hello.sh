@@ -2,14 +2,9 @@
 
 welcome() {
 
-    monolog --begin 5 5 \
-    --title "Author" \
-    --infobox "This script was brought to you by:\nUSER721/5150/187/1312" 0 0 \
-    --and-widget \
-    --title "WELCOME" \
-    --msgbox "This is Artix linux installer script. I was inspired by krum's void install script\n\nTo navigate use arrow keys, enter, space, tab.\n\n\
-Also you can press first letter of options for example: d for dinit.\n\nUse MAP button to navigate through functions, in case you would like to go back.\
-\n\nOptions will not be executed untill the end of options when you will press confirm!\nI tried to put first option recommended\n\n READ EVERYTHING CAREFOULY!" 0 0
+    monolog \
+    --title "AIS Setup" \
+    --msgbox "Welcome to AIS (Artix Installer Script).\n\nNavigation:\n- Arrow keys to move\n- Enter to confirm\n- Space to toggle options\n- TAB to switch buttons\n\nTip: use the MAP button any time to jump between steps.\n\nNothing is applied until the final confirmation screen." 0 0
 
         apply_default_theme
         option_disk

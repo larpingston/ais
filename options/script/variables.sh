@@ -37,7 +37,7 @@ chroot() {
 
 monolog() {
 
-    dialog --stdout --erase-on-exit "$@"
+    dialog --stdout --erase-on-exit --colors --no-shadow --backtitle "AIS Installer" "$@"
 
 }
 
@@ -45,8 +45,8 @@ map() {
 
     if OPTION_MAP=$(monolog --title "MAP" \
     --no-cancel \
-    --menu "Where are you goin?" 0 0 0 \
-    "Welcome" "" "Theme" "" "Disk" "" \
+    --menu "Where are you going?" 0 0 0 \
+    "Welcome" "" "Disk" "" \
     "Additional Disk" "" "Filesystem" "" "Swap" "" \
     "Encryption" "" "Init" "" "Hostname" "" \
     "Root" "" "User" "" "Timezone" "" \
@@ -59,7 +59,6 @@ map() {
 
         case $OPTION_MAP in
             Welcome) welcome ;;
-            Theme) option_theme ;;
             Disk) option_disk ;;
             "Additional Disk") option_add_disk ;;
             Filesystem) option_filesystem ;;
