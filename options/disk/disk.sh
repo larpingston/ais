@@ -26,7 +26,7 @@ option_disk_method() {
 
     DISK_METHOD=$(monolog --begin 5 5 \
       --title "HELPER" \
-      --infobox "Automatic scheme:\n500M efi partition\nSWAP SIZE swap partition\nRest will be root partition" 0 0 \
+      --infobox "Automatic scheme:\n500M boot/efi partition\nSWAP SIZE swap partition\nRest will be root partition\n\nIf GRUB + BIOS mode is used, a 1M bios_grub partition is added automatically." 0 0 \
       --and-widget \
     --title "FORMAT METHOD" \
     --no-cancel \

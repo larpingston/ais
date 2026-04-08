@@ -16,9 +16,19 @@ execute_bootloader() {
     
 	KERNEL_PARAMETERS="root=$ROOT $ROOTFLAG $SWAP_RESUME initrd=\booster-$KERNEL.img initrd=\\$UCODE.img rw add_efi_memmap quiet $NVIDIA_MODESET"
 
-    for i in $BOOTLOADER;
+    local selected_bootloaders
+    selected_bootloaders="$(echo "$BOOTLOADER" | tr -d '"')"
+
+    for i in $selected_bootloaders;
     do
-	    execute_$i
+        if [ "$i" = "efistub_fallback" ]; then
+            execute_efistub_fallback
+            continue
+        fi
+
+        if declare -F "execute_$i" >/dev/null 2>&1; then
+            "execute_$i"
+        fi
 	done
 
         execute_end
@@ -40,9 +50,9 @@ execute_grub() {
     install grub os-prober
 
     if [ -d /sys/firmware/efi ]; then
-        grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Artix
+        grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Artix --removable --no-nvram
     else
-        grub-install --target=i386-pc "$DISK"
+        grub-install --target=i386-pc --modules="part_gpt biosdisk" "$DISK"
     fi
 
     grub-mkconfig -o /boot/grub/grub.cfg
@@ -58,7 +68,7 @@ execute_efistub() {
 
 }
 
-execute_efistub-fallback() {
+execute_efistub_fallback() {
 
         efibootmgr --create \
  --disk $DISK --part 1 \
@@ -69,6 +79,12 @@ execute_efistub-fallback() {
 }
 
 execute_limine() {
+    if [ ! -d /sys/firmware/efi ]; then
+        # Limine entry here is UEFI-only in this script; fallback to GRUB on BIOS VMs.
+        execute_grub
+        return
+    fi
+
     install limine
         
     mkdir -p /boot/EFI/BOOT

@@ -37,28 +37,53 @@ execute_disk_auto() {
 
     sfdisk --delete "$DISK"
 
+    local grub_bios_mode="no"
+    if [[ " $BOOTLOADER " == *" grub "* ]] && [ ! -d /sys/firmware/efi ]; then
+        grub_bios_mode="yes"
+    fi
+
     # 'echo ;' here is equivalent to pressing enter in fdisk
-    (
-        echo g; # gpt table
-        echo n; echo ; echo ; echo +500M; # ESP
-        [ "$SWAP_STYLE" == "partition" ] && echo n; echo ; echo ; echo +"$SWAP_SIZE";
-        echo n; echo ; echo ; echo ;
-        echo w;
-    )| fdisk -w always "$DISK"
+    if [ "$grub_bios_mode" = "yes" ]; then
+        (
+            echo g; # gpt table
+            echo n; echo ; echo ; echo +1M; # BIOS boot partition
+            echo t; echo 4; # set BIOS boot type
+            echo n; echo ; echo ; echo +500M; # /boot (ESP-sized)
+            [ "$SWAP_STYLE" == "partition" ] && echo n; echo ; echo ; echo +"$SWAP_SIZE";
+            echo n; echo ; echo ; echo ;
+            echo w;
+        ) | fdisk -w always "$DISK"
+    else
+        (
+            echo g; # gpt table
+            echo n; echo ; echo ; echo +500M; # ESP
+            [ "$SWAP_STYLE" == "partition" ] && echo n; echo ; echo ; echo +"$SWAP_SIZE";
+            echo n; echo ; echo ; echo ;
+            echo w;
+        ) | fdisk -w always "$DISK"
+    fi
 
     if [[ "$DISK" == /dev/nvme* ]] 
     then
     PP="p"
     fi
 
-    ESP="$DISK""$PP"1
-
-    if [ "$SWAP_STYLE" == "partition" ]
-    then
-        SWAP="$DISK""$PP"2
-        ROOT="$DISK""$PP"3
+    if [ "$grub_bios_mode" = "yes" ]; then
+        ESP="$DISK""$PP"2
+        if [ "$SWAP_STYLE" == "partition" ]; then
+            SWAP="$DISK""$PP"3
+            ROOT="$DISK""$PP"4
+        else
+            ROOT="$DISK""$PP"3
+        fi
     else
-        ROOT="$DISK""$PP"2
+        ESP="$DISK""$PP"1
+        if [ "$SWAP_STYLE" == "partition" ]; then
+            SWAP="$DISK""$PP"2
+            ROOT="$DISK""$PP"3
+        else
+            ROOT="$DISK""$PP"2
+        fi
     fi
 
         execute_encryption
