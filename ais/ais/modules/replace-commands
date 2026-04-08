@@ -1,0 +1,21 @@
+#!/bin/bash
+title=replace-commands
+description="- replace core commands with bat ripgrep fd lsd zoxide xcp"
+status=off
+
+main() {
+
+        install bat ripgrep fd lsd zoxide
+
+sudo -u $USERNAME $AUR -S --noconfirm xcp
+
+cat >> $SSHELL_CONFIG << EOF
+alias find="fd"
+alias cat="bat"
+alias grep="rg"
+alias ls="lsd"
+alias cp="xcp"
+EOF
+
+}
+
