@@ -1,5 +1,44 @@
 #!/bin/bash
 
+apply_dialog_theme() {
+    local dialogrc="/tmp/ais-dialogrc"
+    cat > "$dialogrc" << 'EOF'
+use_colors = ON
+screen_color = (WHITE,BLACK,OFF)
+shadow_color = (BLACK,BLACK,OFF)
+dialog_color = (WHITE,BLACK,OFF)
+title_color = (RED,BLACK,ON)
+border_color = (RED,BLACK,ON)
+button_active_color = (BLACK,RED,ON)
+button_inactive_color = (RED,BLACK,OFF)
+button_key_active_color = (WHITE,RED,ON)
+button_key_inactive_color = (WHITE,BLACK,OFF)
+button_label_active_color = (WHITE,RED,ON)
+button_label_inactive_color = (WHITE,BLACK,OFF)
+inputbox_color = (WHITE,BLACK,OFF)
+inputbox_border_color = (RED,BLACK,ON)
+searchbox_color = (WHITE,BLACK,OFF)
+searchbox_title_color = (RED,BLACK,ON)
+searchbox_border_color = (RED,BLACK,ON)
+position_indicator_color = (RED,BLACK,ON)
+menubox_color = (WHITE,BLACK,OFF)
+menubox_border_color = (RED,BLACK,ON)
+item_color = (WHITE,BLACK,OFF)
+item_selected_color = (BLACK,RED,ON)
+tag_color = (RED,BLACK,ON)
+tag_selected_color = (WHITE,RED,ON)
+check_color = (RED,BLACK,ON)
+check_selected_color = (WHITE,RED,ON)
+uarrow_color = (RED,BLACK,ON)
+darrow_color = (RED,BLACK,ON)
+itemhelp_color = (WHITE,BLACK,OFF)
+form_active_text_color = (WHITE,BLACK,OFF)
+form_text_color = (WHITE,BLACK,OFF)
+form_item_readonly_color = (RED,BLACK,ON)
+EOF
+    export DIALOGRC="$dialogrc"
+}
+
 apply_default_theme() {
     # Default to a dark red-ish palette without prompting.
     wal -q --theme "sexy-tangoesque" 2>/dev/null || wal -q --theme "sexy-s3r0-modified" 2>/dev/null || true

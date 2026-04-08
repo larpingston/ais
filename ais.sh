@@ -31,5 +31,6 @@ esac
 
 fi
 
+apply_dialog_theme
 
 welcome
